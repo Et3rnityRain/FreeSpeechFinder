@@ -20,7 +20,8 @@ public:
     int getTense(); // Найти время предложения
     int getPerson(); // Найти лицо предложения
 
-    void deleteTags(); // Удалить тэги из фрагмента текста
+    void deleteDirectSpeech(QList <QString> &elementaryTokens);
+    void deleteTags(QString &text); // Удалить тэги из фрагмента текста
     void loadTextToFile(); // Загрузить предложение в файл
     void getInfoFromStanford(); // Получить информацию в StanfordCoreNLP
     void loadInfoToMemory(); // Загрузить полученную информацию в память
