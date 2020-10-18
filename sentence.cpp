@@ -79,3 +79,47 @@ void Sentence::loadInfoToMemory()
         file.close();
     }
 }
+
+int Sentence::getTense()
+{
+    // Модальные глаголы
+    if(data.contains("would") || data.contains("should") || data.contains("could") || data.contains("couldn't") || data.contains("had to") || data.contains("might"))
+        return past;
+    if (data.contains("can") || data.contains("can't") || data.contains("have to") || data.contains("must") || data.contains("may"))
+        return true;
+
+    // Subjunctive mood
+    if(data.contains("if") && data.contains("were")) // If I were you...
+        return present;
+
+    // Complex Object
+    if(data.contains("VBD") && (data.contains("VBG"))) // Future Simple
+        return past;
+
+    // Compound Sentenses и обычные предложения
+    if(data.contains("VB") && (data.contains("will") || data.contains("shall"))) // Future Simple
+        return future;
+    if(data.contains("VBG") && (data.contains("will") || data.contains("shall"))) // Future Continious
+        return future;
+    if(data.contains("VBD") && (data.contains("will") || data.contains("shall"))) // Future Continious
+        return future;
+    if(data.contains("VBD")) // Verb, past tense
+        return past;
+    if(data.contains("VBN")) // Verb, past participle (Present or Past Perfect == past)
+        return past;
+    if(data.contains("VBG") && (data.contains("was") || data.contains("were"))) // Past Continious
+        return past;
+    if(data.contains("VBG") && (data.contains("has been") || data.contains("have been") || data.contains("had been"))) // Present или Past Perfect Continious == past
+        return past;
+    if(data.contains("VB") && (data.contains("would") || data.contains("should"))) // Future-in-the-Past == past
+        return past;
+    if(data.contains("VBZ")) // Verb, 3rd person singular present
+        return present;
+    if(data.contains("VBP")) // Verb, non-3rd person singular present
+        return present;
+    if(data.contains("VBG") && (data.contains("is") || data.contains("are") || data.contains("am"))) // Present participle
+        return present;
+
+    // Односложное предложение (impossible и т.п.)
+    return present;
+}
