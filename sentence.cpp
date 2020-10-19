@@ -123,3 +123,17 @@ int Sentence::getTense()
     // Односложное предложение (impossible и т.п.)
     return present;
 }
+
+/* !
+* \Определение лица преложения
+* \return - лицо предложения
+*/
+int Sentence::getPerson()
+{
+        if (data.contains("Text=I ") || data.contains("Text=we "))
+            return first;
+        else if(data.contains("Text=he ") || data.contains("Text=she ") || data.contains("NNP") || data.contains("Text=it "))
+            return third;
+        else
+            return second;
+}
