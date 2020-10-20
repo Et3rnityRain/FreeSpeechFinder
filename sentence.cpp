@@ -1,4 +1,5 @@
 #include "sentence.h"
+#include <QThread>
 
 Sentence::Sentence()
 {
@@ -63,7 +64,7 @@ void Sentence::getInfoFromStanford()
 {
     QProcess proc;
     proc.startDetached(path + "/start.bat");
-    proc.waitForFinished(-1);
+    QThread::sleep(15);
 }
 
 /* !
@@ -71,11 +72,11 @@ void Sentence::getInfoFromStanford()
  */
 void Sentence::loadInfoToMemory()
 {
-    QFile file(path + "/input.txt.out");
+    QFile file(path + "/input.txt.xml");
     if ((file.exists())&&(file.open(QIODevice::ReadOnly)))
     {
         QTextStream in(&file);
-        in >> data;
+        data = in.readAll();
         file.close();
     }
 }
@@ -130,10 +131,14 @@ int Sentence::getTense()
 */
 int Sentence::getPerson()
 {
-        if (data.contains("Text=I ") || data.contains("Text=we "))
+        if (sentence.contains("I ") || sentence.contains(" we ") || sentence.contains("We "))
             return first;
-        else if(data.contains("Text=he ") || data.contains("Text=she ") || data.contains("NNP") || data.contains("Text=it "))
+        else if(sentence.contains(" he ") || sentence.contains("He ") || sentence.contains(" she ") || sentence.contains("She ") || sentence.contains(" it ") || sentence.contains("It "))
+            return third;
+        else if (sentence.contains("You ") || sentence.contains(" you ") || sentence.contains("They ") || sentence.contains(" they "))
+            return second;
+        else if (data.contains("NNP")) // Не содержит местоимений, а только имя собственное
             return third;
         else
-            return second;
+            return first; // Безличное предложение
 }
