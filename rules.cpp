@@ -1,39 +1,44 @@
+/*!
+* \file rules.cpp
+* \brief FreeSpeechFinder
+*/
+
 #include "rules.h"
 
-/* !
-* \Проверка на соответствие предложения с одним из правил
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по какому-либо из правил (да/нет)
+/*!
+Проверка на соответствие предложения с одним из правил
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по какому-либо из правил (да/нет)
 */
 bool Rules::checkRules(Sentence &sentence)
 {
     return (RhetoricalQuestion(sentence) || ExclamotarySentence(sentence) || ChangeNarrative(sentence) || TalkingToYourself(sentence) || Thoughts(sentence) || ChangePersonNarrative(sentence));
 }
 
-/* !
-* \Проверка на наличие в предложении риторического вопроса
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по этому правилу (true/false)
+/*!
+Проверка на наличие в предложении риторического вопроса
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по этому правилу (true/false)
 */
 bool Rules::RhetoricalQuestion(Sentence &sentence)
 {
     return sentence.sentence.contains("?");
 }
 
-/* !
-* \Проверка на наличие в предложении восклицания
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по этому правилу (true/false)
+/*!
+Проверка на наличие в предложении восклицания
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по этому правилу (true/false)
 */
 bool Rules::ExclamotarySentence(Sentence &sentence)
 {
     return sentence.sentence.contains("!");
 }
 
-/* !
-* \Проверка на наличие в предложении смены времени повествования
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по этому правилу (true/false)
+/*!
+Проверка на наличие в предложении смены времени повествования
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по этому правилу (true/false)
 */
 bool Rules::ChangeNarrative(Sentence &sentence)
 {
@@ -51,10 +56,10 @@ bool Rules::ChangeNarrative(Sentence &sentence)
             return false;
 }
 
-/* !
-* \Проверка на наличие в предложении конструкции "разговора героя с собой"
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по этому правилу (true/false)
+/*!
+Проверка на наличие в предложении конструкции "разговора героя с собой"
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по этому правилу (true/false)
 */
 bool Rules::TalkingToYourself(Sentence &sentence)
 {
@@ -79,10 +84,10 @@ bool Rules::TalkingToYourself(Sentence &sentence)
         return false;
 }
 
-/* !
-* \Проверка на наличие в предложении мыслей героев
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по этому правилу (true/false)
+/*!
+Проверка на наличие в предложении мыслей героев
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по этому правилу (true/false)
 */
 bool Rules::Thoughts(Sentence &sentence)
 {
@@ -109,10 +114,10 @@ bool Rules::Thoughts(Sentence &sentence)
         return false;
 }
 
-/* !
-* \Проверка на наличие в предложении смены лица повествования
-* \param[in] sentence - предложение и необходимая информация о нем
-* \return - проходит ли предложение по этому правилу (true/false)
+/*!
+Проверка на наличие в предложении смены лица повествования
+\param sentence[in] - предложение и необходимая информация о нем
+\return - проходит ли предложение по этому правилу (true/false)
 */
 bool Rules::ChangePersonNarrative(Sentence &sentence)
 {

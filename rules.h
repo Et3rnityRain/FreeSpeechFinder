@@ -1,12 +1,18 @@
+/*!
+* \file rules.h
+* \brief FreeSpeechFinder
+*/
+
 #ifndef RULES_H
 #define RULES_H
 #include "sentence.h"
 
+/// Класс, хранящий правила и выполняющий проверку предложений
 class Rules
 {
 public:
-    QString textTense;
-    QString textPerson;
+    QString textTense; ///< Время текста
+    QString textPerson; ///< Лицо текста
 
     bool checkRules(Sentence &sentense);
 

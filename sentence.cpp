@@ -1,3 +1,8 @@
+/*!
+* \file sentence.cpp
+* \brief FreeSpeechFinder
+*/
+
 #include "sentence.h"
 #include <QThread>
 
@@ -10,10 +15,10 @@ Sentence::Sentence()
     path = dir;
 }
 
-/* !
- * \Удаление тэгов
- * \param[in|out] elementaryTokens - ссылка на массив токенов, где нужно удалить прямую речь
- */
+/*!
+Удаление прямой речи из текста
+\param elementaryTokens[in|out] - ссылка на массив токенов, где нужно удалить прямую речь
+*/
 void Sentence::deleteDirectSpeech(QList <QString> &elementaryTokens)
 {
     for (int i = 0; i < elementaryTokens.size(); i++)
@@ -24,28 +29,15 @@ void Sentence::deleteDirectSpeech(QList <QString> &elementaryTokens)
             {
                 elementaryTokens.removeAt(i);
             }
-            if (elementaryTokens[i + 1] == "-" || elementaryTokens[i + 2] == "-")
-                while(!elementaryTokens[i].contains("!") || !elementaryTokens[i].contains(".") || !elementaryTokens[i].contains("?"))
-                    elementaryTokens.removeAt(i);
             elementaryTokens.removeAt(i);
         }
     }
 }
 
-/* !
- * \Удаление тэгов
- * \param[in|out] text - ссылка на текст, где нужно удалить тэги
- */
-void Sentence::deleteTags(QString &text)
-{
-    QRegExp rx("<\/?[a-z]+>");
-    text.remove(rx);
-}
-
-/* !
- * \Загрузка предложения в файл
- * \param[in] path - путь к Stanford Core NLP
- */
+/*!
+Загрузка предложения в файл
+\param path[in]- путь к Stanford Core NLP
+*/
 void Sentence::loadTextToFile()
 {
     QFile file(path + "/input.txt");
@@ -57,9 +49,9 @@ void Sentence::loadTextToFile()
     }
 }
 
-/* !
- * \Получение информации из Stanford Core NLP
- */
+/*!
+Получение информации из Stanford Core NLP
+*/
 void Sentence::getInfoFromStanford()
 {
     QProcess proc;
@@ -67,9 +59,9 @@ void Sentence::getInfoFromStanford()
     QThread::sleep(15);
 }
 
-/* !
- * \Загрузка предложения в память
- */
+/*!
+Загрузка предложения в память
+*/
 void Sentence::loadInfoToMemory()
 {
     QFile file(path + "/input.txt.xml");
@@ -81,6 +73,10 @@ void Sentence::loadInfoToMemory()
     }
 }
 
+/*!
+\Определение время преложения
+\return - время предложения
+*/
 int Sentence::getTense()
 {
     // Модальные глаголы
@@ -125,9 +121,9 @@ int Sentence::getTense()
     return present;
 }
 
-/* !
-* \Определение лица преложения
-* \return - лицо предложения
+/*!
+\Определение лица преложения
+\return - лицо предложения
 */
 int Sentence::getPerson()
 {
