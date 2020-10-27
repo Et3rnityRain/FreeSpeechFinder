@@ -27,13 +27,13 @@ void findFreeSpeech(QString &pageText, QString tense, QString person);
 Распаковать epub-файла
 \param path[in] - Путь к файлу
 */
-void unpack(QString &path);
+void unpack(QString path);
 
 /*!
 Запаковать epub-файла
 \param path[in] - Путь к файлу
 */
-void pack(QString &path);
+void pack(QString path);
 
 /*!
 Получение текста из файла
@@ -126,6 +126,8 @@ int main(int argc, char *argv[])
     if(!isFind)
     {
         printf("\nNo free speech in text.\n");
+        QDir dir(path.remove(".epub"));
+        dir.removeRecursively();
         return 0;
     }
 
@@ -134,7 +136,7 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-void unpack(QString &path)
+void unpack(QString path)
 {
     QString dir = QDir::currentPath();
     dir.remove(dir.lastIndexOf("/"), dir.size() - dir.lastIndexOf("/")).append("/7-Zip/7z.exe");
@@ -150,21 +152,28 @@ void unpack(QString &path)
     proc.waitForFinished(-1);
 }
 
-void pack(QString &path)
+void pack(QString path)
 {
     QString dir = QDir::currentPath();
     dir.remove(dir.lastIndexOf("/"), dir.size() - dir.lastIndexOf("/")).append("/7-Zip/7z.exe");
 
     QProcess proc;
-    QStringList list; //
+    QStringList list;
     QString tmp = path;
 
-    list << "a" << "-sdel" << path.remove(".epub").append("_FreeSpeech") << path.remove("_FreeSpeech").append("\\");
+    list << "a" << "-tzip" << "-sdel" << path.remove(".epub").append("_FreeSpeech")
+         << path.remove("_FreeSpeech").append("\\").append("META-INF")
+         << path.remove("META-INF").append("OEBPS")
+         << path.remove("OEBPS").append("mimetype");
+
     proc.start(dir, list);
     proc.waitForFinished(-1);
 
-    QString old_name = tmp.remove(".epub").append("_FreeSpeech.7z");
-    QString new_name = tmp.remove(".7z").append(".epub");
+    QDir old(path.remove("\\mimetype"));
+    old.removeRecursively();
+
+    QString old_name = tmp.remove(".epub").append("_FreeSpeech.zip");
+    QString new_name = tmp.remove(".zip").append(".epub");
     QFile::rename(old_name, new_name);
 }
 
@@ -218,6 +227,8 @@ void findFreeSpeech(QString &pageText, QString tense, QString person)
         }
     }
 
+    textString.remove("\n");
+
     elementaryTokens = textString.split(QRegExp("\\b"));
     sentence.deleteDirectSpeech(elementaryTokens);
 
@@ -250,17 +261,9 @@ void findFreeSpeech(QString &pageText, QString tense, QString person)
         // Выделение тэгами
         if(rules.checkRules(sentence))
         {
-            text[i].prepend("<span color=\"yellow\">");
-            text[i].append("</span>");
+            pageText.replace(QString(text[i]), QString(text[i].append("</span>").prepend("<span color=\"yellow\">")));
             isFind = true;
         }
-    }
-
-    // Собрать текст
-    pageText.clear();
-    for (int i = 0; i < text.size(); i++)
-    {
-        pageText.append(text[i]);
     }
 }
 
