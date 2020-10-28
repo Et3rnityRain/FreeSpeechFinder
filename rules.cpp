@@ -42,18 +42,18 @@ bool Rules::ExclamotarySentence(Sentence &sentence)
 */
 bool Rules::ChangeNarrative(Sentence &sentence)
 {
-        if(textTense == "present")
-        {
-            if(sentence.getTense() == sentence.past)
-                return true;
-        }
-        else if(textTense == "past")
-        {
-            if(sentence.getTense() == sentence.present || sentence.getTense() == sentence.future)
-                return true;
-        }
-        else
-            return false;
+    if(textTense == "present")
+    {
+        if(sentence.getTense() == sentence.past)
+            return true;
+    }
+    else if(textTense == "past")
+    {
+        if(sentence.getTense() == sentence.present || sentence.getTense() == sentence.future)
+            return true;
+    }
+    else
+        return false;
 }
 
 /*!
@@ -63,7 +63,16 @@ bool Rules::ChangeNarrative(Sentence &sentence)
 */
 bool Rules::TalkingToYourself(Sentence &sentence)
 {
-        QList <QString> structure = {
+    QList <QString> talkingVerbs = {
+        "tell",
+        "told",
+        "ask"
+        "swear",
+        "swore",
+        "sworn"
+    };
+
+    QList <QString> structure = {
         "myself",
         "himself",
         "herself",
@@ -71,17 +80,35 @@ bool Rules::TalkingToYourself(Sentence &sentence)
         "ourselves",
         "yourselves",
         "themselves"
-        };
+    };
 
-        for (int i = 0; i < structure.size(); i++)
-        {
-            if(sentence.sentence.contains(structure[i]))
+    QList <QString> separators = {
+        ",",
+        ";",
+        "and",
+        "or",
+        "but",
+        "so"
+    };
+
+    for (int i = 0; i < structure.size(); i++)
+        for (int j = 0; j < talkingVerbs.size(); j++)
+            for (int k = 0; k < separators.size(); k++)
             {
-                if(!sentence.sentence.contains("self that"))
-                    return true;
+                if(sentence.sentence.contains(structure[i]) && sentence.sentence.contains(talkingVerbs[j]))
+                {
+                    if (sentence.sentence.indexOf(structure[i]) < sentence.sentence.indexOf(separators[k]) // Если конструкция TalkingToYourself находится в левой части двусоставного предложения (до союза или знака препинания)
+                            && sentence.sentence.indexOf(talkingVerbs[j]) < sentence.sentence.indexOf(separators[k])
+                            && !(sentence.sentence.indexOf("that") < sentence.sentence.indexOf(separators[k])))
+                        return true;
+                    else if (sentence.sentence.indexOf(structure[i]) > sentence.sentence.indexOf(separators[k]) // Если конструкция TalkingToYourself находится в правой части двусоставного предложения (после союза или знака препинания) или предложение односоставное
+                            && sentence.sentence.indexOf(structure[j]) > sentence.sentence.indexOf(separators[k])
+                            && !(sentence.sentence.indexOf("that") > sentence.sentence.indexOf(separators[k])))
+                        return true;
+                }
             }
-        }
-        return false;
+
+    return false;
 }
 
 /*!
@@ -91,27 +118,38 @@ bool Rules::TalkingToYourself(Sentence &sentence)
 */
 bool Rules::Thoughts(Sentence &sentence)
 {
-        QList <QString> structure = {
-            "remember",
-            "remembered",
-            "was remembering",
-            "were remembering",
-            "think",
-            "thought",
-            "was thinking",
-            "were thinking"
-        };
+    QList <QString> structure = {
+        "remember",
+        "remembered",
+        "was remembering",
+        "were remembering",
+        "think",
+        "thought",
+        "was thinking",
+        "were thinking"
+    };
 
-        for(int i = 0; i < structure.size(); i++)
+    QList <QString> separators = {
+        ",",
+        ";",
+        "and",
+        "or",
+        "but",
+        "so"
+    };
+
+    for (int i = 0; i < structure.size(); i++)
+        for (int j = 0; j < separators.size(); j++)
         {
-            if(sentence.sentence.contains(structure[i]))
-            {
-                if(!sentence.sentence.contains("that"))
-                    return true;
-            }
+            if (sentence.sentence.indexOf(structure[i]) < sentence.sentence.indexOf(separators[j]) // Если конструкция Thoughts находится в левой части двусоставного предложения (до союза или знака препинания)
+                    && !(sentence.sentence.indexOf("that") < sentence.sentence.indexOf(separators[j])))
+                return true;
+            else if (sentence.sentence.indexOf(structure[i]) > sentence.sentence.indexOf(separators[j]) // Если конструкция Thoughts находится в правой части двусоставного предложения (после союза или знака препинания) или предложение односоставное
+                    && !(sentence.sentence.indexOf("that") > sentence.sentence.indexOf(separators[j])))
+                return true;
         }
 
-        return false;
+    return false;
 }
 
 /*!
@@ -121,16 +159,16 @@ bool Rules::Thoughts(Sentence &sentence)
 */
 bool Rules::ChangePersonNarrative(Sentence &sentence)
 {
-        if(textPerson == "first")
-        {
-            if(sentence.getPerson() == sentence.second)
-                return true;
-        }
-        else if (textPerson == "third")
-        {
-            if(sentence.getPerson() == sentence.first || sentence.getPerson() == sentence.second)
-                return true;
-        }
-        else
-            return false;
+    if(textPerson == "first")
+    {
+        if(sentence.getPerson() == sentence.second)
+            return true;
+    }
+    else if (textPerson == "third")
+    {
+        if(sentence.getPerson() == sentence.first || sentence.getPerson() == sentence.second)
+            return true;
+    }
+    else
+        return false;
 }

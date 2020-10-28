@@ -1,6 +1,42 @@
 #include "rules.h"
 #include "sentence.h"
 
+class checkRulesTest
+{
+public:
+    void startTest(QList <QString> &errorList)
+    {
+        if (!firstStrangeTest())
+            errorList.append("Error in test: firstStrangeTest\n");
+        if (!secondStrangeTest())
+            errorList.append("Error in test: secondStrangeTest\n");
+    }
+
+    bool firstStrangeTest()
+    {
+        Sentence sentence;
+        Rules rules;
+        sentence.sentence = "The old lady pulled her spectacles down and looked over them about the room; then she put them up and looked out under them.";
+        sentence.loadTextToFile();
+        sentence.getInfoFromStanford();
+        sentence.loadInfoToMemory();
+
+        return rules.checkRules(sentence) == false;
+    }
+
+    bool secondStrangeTest()
+    {
+        Sentence sentence;
+        Rules rules;
+        sentence.sentence = "She seldom or never looked through them for so small a thing as a boy; they were her state pair, the pride of her heart, and were built for \"style\", not service—she could have seen through a pair of stove-lids just as well.";
+        sentence.loadTextToFile();
+        sentence.getInfoFromStanford();
+        sentence.loadInfoToMemory();
+
+        return rules.checkRules(sentence) == false;
+    }
+};
+
 class getTenseTest
 {
 public:
@@ -478,7 +514,7 @@ public:
 
     void RunAllTest()
     {
-
+        checkRulesTest test0;
         getTenseTest test1;
         getPersonTest test2;
         RhetoricalQuestionTest test3;
@@ -488,6 +524,7 @@ public:
         ThoughtsTest test7;
         ChangeNarrativeTest test8;
 
+        test0.startTest(errorList);
         test1.startTest(errorList);
         test2.startTest(errorList);
         test3.startTest(errorList);
