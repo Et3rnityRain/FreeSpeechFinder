@@ -16,6 +16,8 @@ public:
     {
         Sentence sentence;
         Rules rules;
+        rules.textTense = "past";
+        rules.textPerson = "third";
         sentence.sentence = "The old lady pulled her spectacles down and looked over them about the room; then she put them up and looked out under them.";
         sentence.loadTextToFile();
         sentence.getInfoFromStanford();
@@ -28,6 +30,8 @@ public:
     {
         Sentence sentence;
         Rules rules;
+        rules.textTense = "past";
+        rules.textPerson = "third";
         sentence.sentence = "She seldom or never looked through them for so small a thing as a boy; they were her state pair, the pride of her heart, and were built for \"style\", not service—she could have seen through a pair of stove-lids just as well.";
         sentence.loadTextToFile();
         sentence.getInfoFromStanford();

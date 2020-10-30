@@ -19,19 +19,30 @@ Sentence::Sentence()
 Удаление прямой речи из текста
 \param elementaryTokens[in|out] - ссылка на массив токенов, где нужно удалить прямую речь
 */
-void Sentence::deleteDirectSpeech(QList <QString> &elementaryTokens)
+bool Sentence::isDirectSpeech()
 {
-    for (int i = 0; i < elementaryTokens.size(); i++)
+    if (!isDS && sentence.contains("“") && sentence.contains("”"))
     {
-        if (elementaryTokens[i].contains("\""))
-        {
-            while(!elementaryTokens[i].contains("\""))
-            {
-                elementaryTokens.removeAt(i);
-            }
-            elementaryTokens.removeAt(i);
-        }
+        isDS = false;
+        return true;
     }
+    else if (!isDS && sentence.contains("“"))
+    {
+        isDS = true;
+        return true;
+    }
+    else if (isDS && sentence.contains("“") && sentence.contains("”"))
+    {
+        isDS = true;
+        return true;
+    }
+    else if(isDS && sentence.contains("”"))
+    {
+        isDS = false;
+        return true;
+    }
+
+    return isDS;
 }
 
 /*!
@@ -56,7 +67,7 @@ void Sentence::getInfoFromStanford()
 {
     QProcess proc;
     proc.startDetached(path + "/start.bat");
-    QThread::sleep(15);
+    QThread::sleep(5);
 }
 
 /*!

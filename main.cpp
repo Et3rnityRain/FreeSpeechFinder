@@ -213,10 +213,8 @@ void getTextFromFile(QString path, QString tense, QString person)
 void findFreeSpeech(QString &pageText, QString tense, QString person)
 {
     Rules rules;
-    Sentence sentence;
     QList <QString> text;
     QString textString;
-    QList <QString> elementaryTokens;
 
     QXmlStreamReader xml(pageText);
     while (!xml.atEnd())
@@ -227,26 +225,24 @@ void findFreeSpeech(QString &pageText, QString tense, QString person)
         }
     }
 
-    textString.remove("\n");
-
-    elementaryTokens = textString.split(QRegExp("\\b"));
-    sentence.deleteDirectSpeech(elementaryTokens);
-
     // Разделение текста на предложения
     int begin = 0;
-    for (int i = 1; i < elementaryTokens.size(); i++)
+    for (int i = 3; i < textString.size(); i++)
     {
-        if (elementaryTokens[i].contains("!") || elementaryTokens[i].contains(".") || elementaryTokens[i].contains("?"))
-            if(elementaryTokens[i - 1] != "Dr" && elementaryTokens[i - 1] != "Mr" && elementaryTokens[i - 1] != "Mrs")
+        if (textString[i] == '!' || textString[i] == '.' || textString[i] == '?')
+            if(textString[i - 2] != 'D' && textString[i - 2] != 'M' && textString[i - 3] != 'M' && textString[i - 2] != 'N')
             {
                 QString sentence;
-                for (int j = begin; j <= i; j++)
-                    sentence.append(elementaryTokens[j]);
+                for (int j = begin; j <= i + 1; j++)
+                    sentence.append(textString[j]);
+
+                begin = i + 2;
+
                 text.append(sentence);
-                begin = i + 1;
             }
     }
 
+    Sentence sentence;
     rules.textTense = tense;
     rules.textPerson = person;
 
@@ -259,11 +255,19 @@ void findFreeSpeech(QString &pageText, QString tense, QString person)
         sentence.loadInfoToMemory();
 
         // Выделение тэгами
-        if(rules.checkRules(sentence))
+        if(rules.checkRules(sentence) && !sentence.isDirectSpeech())
         {
-            pageText.replace(QString(text[i]), QString(text[i].append("</span>").prepend("<span color=\"yellow\">")));
+            text[i].prepend("<span style=\"color: #ff6600;\">");
+            text[i].append("</span>");
             isFind = true;
         }
+    }
+
+    // Собрать текст
+    pageText.clear();
+    for (int i = 0; i < text.size(); i++)
+    {
+        pageText.append(text[i]);
     }
 }
 

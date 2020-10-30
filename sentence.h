@@ -19,6 +19,7 @@ public:
 
     QString sentence; ///< Предложение
     QString data; ///< Информация о предложении
+    bool isDS = false;
     enum {past, present, future} tense; ///< Время предложения
     enum {first, second, third} person; ///< Лицо предложения
     QString path; ///< Путь к Stanford Core NLP
@@ -26,7 +27,7 @@ public:
     int getTense(); // Найти время предложения
     int getPerson(); // Найти лицо предложения
 
-    void deleteDirectSpeech(QList <QString> &elementaryTokens); // Удалить прямую речь из фрагмента текста
+    bool isDirectSpeech(); // Удалить прямую речь из фрагмента текста
     void loadTextToFile(); // Загрузить предложение в файл
     void getInfoFromStanford(); // Получить информацию в StanfordCoreNLP
     void loadInfoToMemory(); // Загрузить полученную информацию в память

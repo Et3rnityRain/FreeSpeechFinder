@@ -47,13 +47,14 @@ bool Rules::ChangeNarrative(Sentence &sentence)
         if(sentence.getTense() == sentence.past)
             return true;
     }
-    else if(textTense == "past")
+
+    if(textTense == "past")
     {
         if(sentence.getTense() == sentence.present || sentence.getTense() == sentence.future)
             return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 /*!
@@ -164,11 +165,12 @@ bool Rules::ChangePersonNarrative(Sentence &sentence)
         if(sentence.getPerson() == sentence.second)
             return true;
     }
-    else if (textPerson == "third")
+
+    if (textPerson == "third")
     {
         if(sentence.getPerson() == sentence.first || sentence.getPerson() == sentence.second)
             return true;
     }
-    else
-        return false;
+
+    return false;
 }
