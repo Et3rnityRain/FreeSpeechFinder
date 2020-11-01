@@ -21,17 +21,12 @@ Sentence::Sentence()
 */
 bool Sentence::isDirectSpeech()
 {
-    if (!isDS && sentence.contains("“") && sentence.contains("”"))
+    if (!isDS && sentence.contains("“") && sentence.contains("”") && sentence.lastIndexOf(("”")) > sentence.lastIndexOf("“"))
     {
         isDS = false;
         return true;
     }
-    else if (!isDS && sentence.contains("“"))
-    {
-        isDS = true;
-        return true;
-    }
-    else if (isDS && sentence.contains("“") && sentence.contains("”"))
+    else if (!isDS && sentence.contains("“") && sentence.contains("”"))
     {
         isDS = true;
         return true;
@@ -39,6 +34,11 @@ bool Sentence::isDirectSpeech()
     else if(isDS && sentence.contains("”"))
     {
         isDS = false;
+        return true;
+    }
+    else if (!isDS && sentence.contains("“"))
+    {
+        isDS = true;
         return true;
     }
 
@@ -93,8 +93,6 @@ int Sentence::getTense()
     // Модальные глаголы
     if(data.contains("would") || data.contains("should") || data.contains("could") || data.contains("couldn't") || data.contains("had to") || data.contains("might"))
         return past;
-    if (data.contains("can") || data.contains("can't") || data.contains("have to") || data.contains("must") || data.contains("may"))
-        return true;
 
     // Subjunctive mood
     if(data.contains("if") && data.contains("were")) // If I were you...
@@ -147,5 +145,5 @@ int Sentence::getPerson()
         else if (data.contains("NNP")) // Не содержит местоимений, а только имя собственное
             return third;
         else
-            return first; // Безличное предложение
+            return third; // Содержит существительное
 }

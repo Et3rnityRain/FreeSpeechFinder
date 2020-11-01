@@ -10,6 +10,10 @@ public:
             errorList.append("Error in test: firstStrangeTest\n");
         if (!secondStrangeTest())
             errorList.append("Error in test: secondStrangeTest\n");
+        if (!thirdStrangeTest())
+            errorList.append("Error in test: thirdStrangeTest\n");
+        if (!fourthStrangeTest())
+            errorList.append("Error in test: fourthStrangeTest\n");
     }
 
     bool firstStrangeTest()
@@ -33,6 +37,34 @@ public:
         rules.textTense = "past";
         rules.textPerson = "third";
         sentence.sentence = "She seldom or never looked through them for so small a thing as a boy; they were her state pair, the pride of her heart, and were built for \"style\", not service—she could have seen through a pair of stove-lids just as well.";
+        sentence.loadTextToFile();
+        sentence.getInfoFromStanford();
+        sentence.loadInfoToMemory();
+
+        return rules.checkRules(sentence) == false;
+    }
+
+    bool thirdStrangeTest()
+    {
+        Sentence sentence;
+        Rules rules;
+        rules.textTense = "past";
+        rules.textPerson = "third";
+        sentence.sentence = "But everyone agreed, the worst was over.";
+        sentence.loadTextToFile();
+        sentence.getInfoFromStanford();
+        sentence.loadInfoToMemory();
+
+        return rules.checkRules(sentence) == false;
+    }
+
+    bool fourthStrangeTest()
+    {
+        Sentence sentence;
+        Rules rules;
+        rules.textTense = "past";
+        rules.textPerson = "third";
+        sentence.sentence = "A small boy in a yellow slicker and red galoshes ran cheerfully along beside the newspaper boat.";
         sentence.loadTextToFile();
         sentence.getInfoFromStanford();
         sentence.loadInfoToMemory();
@@ -529,14 +561,14 @@ public:
         ChangeNarrativeTest test8;
 
         test0.startTest(errorList);
-        test1.startTest(errorList);
-        test2.startTest(errorList);
-        test3.startTest(errorList);
-        test4.startTest(errorList);
-        test5.startTest(errorList);
-        test6.startTest(errorList);
-        test7.startTest(errorList);
-        test8.startTest(errorList);
+//        test1.startTest(errorList);
+//        test2.startTest(errorList);
+//        test3.startTest(errorList);
+//        test4.startTest(errorList);
+//        test5.startTest(errorList);
+//        test6.startTest(errorList);
+//        test7.startTest(errorList);
+//        test8.startTest(errorList);
     }
 
     void AnalyzeResult()
