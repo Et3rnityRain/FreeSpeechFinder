@@ -142,12 +142,15 @@ bool Rules::Thoughts(Sentence &sentence)
     for (int i = 0; i < structure.size(); i++)
         for (int j = 0; j < separators.size(); j++)
         {
-            if (sentence.sentence.indexOf(structure[i]) < sentence.sentence.indexOf(separators[j]) // Если конструкция Thoughts находится в левой части двусоставного предложения (до союза или знака препинания)
-                    && !(sentence.sentence.indexOf("that") < sentence.sentence.indexOf(separators[j])))
-                return true;
-            else if (sentence.sentence.indexOf(structure[i]) > sentence.sentence.indexOf(separators[j]) // Если конструкция Thoughts находится в правой части двусоставного предложения (после союза или знака препинания) или предложение односоставное
-                    && !(sentence.sentence.indexOf("that") > sentence.sentence.indexOf(separators[j])))
-                return true;
+            if(sentence.sentence.contains(structure[i]))
+            {
+                if (sentence.sentence.indexOf(structure[i]) < sentence.sentence.indexOf(separators[j]) // Если конструкция Thoughts находится в левой части двусоставного предложения (до союза или знака препинания)
+                        && !(sentence.sentence.indexOf("that") < sentence.sentence.indexOf(separators[j])))
+                    return true;
+                else if (sentence.sentence.indexOf(structure[i]) > sentence.sentence.indexOf(separators[j]) // Если конструкция Thoughts находится в правой части двусоставного предложения (после союза или знака препинания) или предложение односоставное
+                         && !(sentence.sentence.indexOf("that") > sentence.sentence.indexOf(separators[j])))
+                    return true;
+            }
         }
 
     return false;
